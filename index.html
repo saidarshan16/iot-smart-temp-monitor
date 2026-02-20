@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Factory Live Monitor</title>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 60px; }
+    h1 { font-size: 40px; }
+    #temp { font-size: 32px; }
+    #status { font-size: 28px; font-weight: bold; }
+    .normal { color: green; }
+    .high { color: red; }
+    canvas { margin-top: 40px; }
+  </style>
+</head>
+
+<body>
+
+<h1>Smart Temperature Live Monitor</h1>
+
+<div id="temp">Temperature: -- °C</div>
+<div id="status" class="normal">Status: --</div>
+
+<canvas id="tempChart" width="700" height="350"></canvas>
+
+<script>
+  var firebaseConfig = {
+    databaseURL: "https://envmonitor-a6800-default-rtdb.firebaseio.com/"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.database();
+
+  var tempRef = db.ref("SmartFactoryNode1/temperature_current");
+  var statusRef = db.ref("SmartFactoryNode1/status");
+  var historyRef = db.ref("SmartFactoryNode1/history");
+
+  tempRef.on("value", function(snapshot) {
+    document.getElementById("temp").innerHTML =
+      "Temperature: " + snapshot.val() + " °C";
+  });
+
+  statusRef.on("value", function(snapshot) {
+    let status = snapshot.val();
+    let statusDiv = document.getElementById("status");
+
+    statusDiv.innerHTML = "Status: " + status;
+
+    if (status === "HIGH") {
+      statusDiv.className = "high";
+    } else {
+      statusDiv.className = "normal";
+    }
+  });
+
+  var labels = [];
+  for (let i = 1; i <= 20; i++) labels.push(i.toString());
+
+  var ctx = document.getElementById("tempChart").getContext("2d");
+
+  var chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Temperature (°C)",
+        data: [],
+        borderColor: "red",
+        fill: false,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: false }
+      }
+    }
+  });
+
+  historyRef.on("value", function(snapshot) {
+    let values = [];
+    snapshot.forEach(child => {
+      values.push(child.val());
+    });
+
+    chart.data.datasets[0].data = values;
+    chart.update();
+  });
+</script>
+
+</body>
+</html>
