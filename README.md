@@ -65,7 +65,7 @@ Else: LED OFF Buzzer OFF Status = NORMAL
 
 📸 Screenshots
 
-- Firebase Realtime Data  
+- Firebase Realtime Data  (IMG-20260221-WA0006(2).jpg)
 - Live Dashboard  
 - Alert Status Display  
 
