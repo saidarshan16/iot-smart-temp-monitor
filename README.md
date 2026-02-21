@@ -71,6 +71,9 @@ Else: LED OFF Buzzer OFF Status = NORMAL
 
 ---
 
+## System Block Diagram
+
+![Block Diagram](IMG-20260221-WA0009.jpg)
 👨‍💻 Author
 
 Sai Darshan  
