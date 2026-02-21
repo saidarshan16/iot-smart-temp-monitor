@@ -63,14 +63,6 @@ If Temperature > 30°C: LED ON Buzzer ON Status = HIGH
 Else: LED OFF Buzzer OFF Status = NORMAL
 ---
 
-📸 Screenshots
-
-- Firebase Realtime Data  (IMG-20260221-WA0006(2).jpg)
-- Live Dashboard  
-- Alert Status Display  
-
----
-
 ## System Block Diagram
 
 ![Block Diagram](IMG-20260221-WA0009.jpg)
